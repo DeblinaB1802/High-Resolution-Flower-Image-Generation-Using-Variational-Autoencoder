@@ -104,7 +104,7 @@ The trained VAE demonstrates an impressive ability to reconstruct and generate h
 
 ## 📚 References
 
-- Kingma, D. P., & Welling, M. (2013). Auto-Encoding Variational Bayes. *arXiv preprint arXiv:1312.6114*.
+- "An Introduction to Variational Autoencoders" by Diederik P. Kingma, Max Welling(2019): [https://arxiv.org/abs/1906.02691](https://arxiv.org/abs/1906.02691)
 - Oxford Flowers102 Dataset: [http://www.robots.ox.ac.uk/~vgg/data/flowers/102](http://www.robots.ox.ac.uk/~vgg/data/flowers/102)
 
 ---
