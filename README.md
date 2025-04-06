@@ -49,12 +49,12 @@ Total loss = `Reconstruction Loss + β * KL Divergence`
 
 ## 🔍 Training Details
 
-- **Input Image Size**: 128x128
-- **Latent Dimension**: Tunable (e.g., 64 or 128)
+- **Input Image Size**: 256x256
+- **Latent Dimension**: 256
 - **Optimizer**: Adam
-- **Learning Rate**: 1e-3
+- **Learning Rate**: 0.0001
 - **Batch Size**: 64
-- **Epochs**: 50+
+- **Epochs**: 300
 - **Framework**: PyTorch with TorchVision
 
 Extensive use of **image transforms** (resize, normalization) was employed to standardize input for efficient learning.
@@ -106,6 +106,5 @@ The trained VAE demonstrates an impressive ability to reconstruct and generate h
 
 - Kingma, D. P., & Welling, M. (2013). Auto-Encoding Variational Bayes. *arXiv preprint arXiv:1312.6114*.
 - Oxford Flowers102 Dataset: [http://www.robots.ox.ac.uk/~vgg/data/flowers/102](http://www.robots.ox.ac.uk/~vgg/data/flowers/102)
-- PyTorch VAE Guide: [https://pytorch.org/tutorials](https://pytorch.org/tutorials)
 
 ---
