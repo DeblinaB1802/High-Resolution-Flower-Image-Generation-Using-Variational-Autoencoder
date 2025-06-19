@@ -113,23 +113,25 @@ VAEs solve this by introducing a probabilistic approach to encoding and decoding
 
 Let:
 
-- **\( x \)**: observed data (e.g., an image)
-- **\( z \)**: latent variable representing the underlying factors that generate \( x \)
-- **\( p(x|z) \)**: the **likelihood**, representing the probability of the data given the latent variable (decoder)
-- **\( q(z|x) \)**: the **approximate posterior**, estimating the true posterior \( p(z|x) \) using a neural network (encoder)
-- **\( p(z) \)**: the **prior** over latent variables, usually set as a standard multivariate normal distribution \( \mathcal{N}(0, I) \)
+- **`x`**: observed data (e.g., an image)
+- **`z`**: latent variable representing the underlying factors that generate `x`
+- **`p(x|z)`**: the **likelihood**, representing the probability of the data given the latent variable (decoder)
+- **`q(z|x)`**: the **approximate posterior**, estimating the true posterior `p(z|x)` using a neural network (encoder)
+- **`p(z)`**: the **prior** over latent variables, usually set as a standard multivariate normal distribution `N(0, I)`
+
+---
 
 ### 📐 Objective of VAEs
 
-The goal is to learn the parameters of \( q(z|x) \) and \( p(x|z) \) such that we can generate realistic data \( x \) by sampling from a simple prior \( p(z) \), like \( \mathcal{N}(0, I) \).
+The goal is to learn the parameters of `q(z|x)` and `p(x|z)` such that we can generate realistic data `x` by sampling from a simple prior `p(z)`, like `N(0, I)`.
+
+---
 
 ### 🔍 Marginal Likelihood
 
 The fundamental quantity we want to maximize is the **log marginal likelihood**:
 
-\[
-\log p(x) = \log \int p(x|z) \, p(z) \, dz
-\]
+`log p(x) = log ∫ p(x|z) * p(z) dz`
 
 This integral is typically **intractable** due to the high-dimensional latent space and nonlinear decoder.
 
@@ -137,60 +139,51 @@ This integral is typically **intractable** due to the high-dimensional latent sp
 
 ### 📉 Variational Lower Bound (ELBO)
 
-To overcome this, we use **variational inference** by introducing a tractable approximate posterior \( q(z|x) \) and derive a **lower bound** on the log-likelihood:
+To overcome this, we use **variational inference** by introducing a tractable approximate posterior `q(z|x)` and derive a **lower bound** on the log-likelihood:
 
-\[
-\log p(x) \geq \mathbb{E}_{q(z|x)}[\log p(x|z)] - D_{KL}(q(z|x) \| p(z))
-\]
+`log p(x) ≥ E_{q(z|x)}[log p(x|z)] - D_KL(q(z|x) || p(z))`
 
 This inequality is known as the **Evidence Lower Bound (ELBO)**.
 
 #### 🔹 1. Reconstruction Term:
 
-\[
-\mathbb{E}_{q(z|x)}[\log p(x|z)]
-\]
+`E_{q(z|x)}[log p(x|z)]`
 
-- Encourages the decoder to reconstruct the input data from the sampled latent variable \( z \).
+- Encourages the decoder to reconstruct the input data from the sampled latent variable `z`.
 - This is typically implemented as a **Mean Squared Error (MSE)** for continuous data or **Binary Cross-Entropy** for binary data.
 
 #### 🔹 2. KL Divergence Term:
 
-\[
-D_{KL}(q(z|x) \| p(z))
-\]
+`D_KL(q(z|x) || p(z))`
 
-- A regularization term that forces the approximate posterior \( q(z|x) \) to stay close to the prior \( p(z) = \mathcal{N}(0, I) \).
+- A regularization term that forces the approximate posterior `q(z|x)` to stay close to the prior `p(z) = N(0, I)`.
 - Ensures that the learned latent space is **smooth** and **well-behaved**, allowing for meaningful sampling and interpolation.
 
 ---
 
 ### 🔁 Why Reparameterization is Needed
 
-The term \( \mathbb{E}_{q(z|x)}[\log p(x|z)] \) involves sampling \( z \sim q(z|x) \), which is non-differentiable and thus cannot be optimized directly using backpropagation.
+The term `E_{q(z|x)}[log p(x|z)]` involves sampling `z ~ q(z|x)`, which is non-differentiable and thus cannot be optimized directly using backpropagation.
 
 To solve this, we use the **Reparameterization Trick**:
 
-\[
-z = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)
-\]
+`z = μ + σ * ε`, where `ε ~ N(0, I)`
 
-- Instead of sampling \( z \) directly, we sample \( \epsilon \) from a standard normal distribution.
-- This separates the **randomness** from the **learnable parameters** \( \mu \) and \( \sigma \), enabling **gradient flow** through the stochastic node.
+- Instead of sampling `z` directly, we sample `ε` from a standard normal distribution.
+- This separates the **randomness** from the **learnable parameters** `μ` and `σ`, enabling **gradient flow** through the stochastic node.
 
 ---
 
 ### 🧱 Full Loss Function
 
-In practice, the VAE loss for a single datapoint \( x \) becomes:
+In practice, the VAE loss for a single datapoint `x` becomes:
 
-\[
-\mathcal{L}_{\text{VAE}}(x) = \underbrace{\text{Reconstruction Loss}}_{\text{e.g., MSE or BCE}} + \underbrace{D_{KL}(q(z|x) \| p(z))}_{\text{KL Divergence}}
-\]
+`L_VAE(x) = Reconstruction Loss (e.g., MSE or BCE) + D_KL(q(z|x) || p(z))`
 
 This is minimized during training using stochastic gradient descent.
 
 ---
+
 
 ## 📊 Applications
 
