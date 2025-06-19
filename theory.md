@@ -131,7 +131,7 @@ The goal is to learn the parameters of `q(z|x)` and `p(x|z)` such that we can ge
 
 The fundamental quantity we want to maximize is the **log marginal likelihood**:
 
-`log p(x) = log ∫ p(x|z) * p(z) dz`
+                `log p(x) = log ∫ p(x|z) * p(z) dz`
 
 This integral is typically **intractable** due to the high-dimensional latent space and nonlinear decoder.
 
@@ -141,20 +141,20 @@ This integral is typically **intractable** due to the high-dimensional latent sp
 
 To overcome this, we use **variational inference** by introducing a tractable approximate posterior `q(z|x)` and derive a **lower bound** on the log-likelihood:
 
-`log p(x) ≥ E_{q(z|x)}[log p(x|z)] - D_KL(q(z|x) || p(z))`
+                `log p(x) ≥ E_{q(z|x)}[log p(x|z)] - D_KL(q(z|x) || p(z))`
 
 This inequality is known as the **Evidence Lower Bound (ELBO)**.
 
 #### 🔹 1. Reconstruction Term:
 
-`E_{q(z|x)}[log p(x|z)]`
+                `E_{q(z|x)}[log p(x|z)]`
 
 - Encourages the decoder to reconstruct the input data from the sampled latent variable `z`.
 - This is typically implemented as a **Mean Squared Error (MSE)** for continuous data or **Binary Cross-Entropy** for binary data.
 
 #### 🔹 2. KL Divergence Term:
 
-`D_KL(q(z|x) || p(z))`
+                `D_KL(q(z|x) || p(z))`
 
 - A regularization term that forces the approximate posterior `q(z|x)` to stay close to the prior `p(z) = N(0, I)`.
 - Ensures that the learned latent space is **smooth** and **well-behaved**, allowing for meaningful sampling and interpolation.
@@ -167,7 +167,7 @@ The term `E_{q(z|x)}[log p(x|z)]` involves sampling `z ~ q(z|x)`, which is non-d
 
 To solve this, we use the **Reparameterization Trick**:
 
-`z = μ + σ * ε`, where `ε ~ N(0, I)`
+                  `z = μ + σ * ε`, where `ε ~ N(0, I)`
 
 - Instead of sampling `z` directly, we sample `ε` from a standard normal distribution.
 - This separates the **randomness** from the **learnable parameters** `μ` and `σ`, enabling **gradient flow** through the stochastic node.
@@ -178,7 +178,7 @@ To solve this, we use the **Reparameterization Trick**:
 
 In practice, the VAE loss for a single datapoint `x` becomes:
 
-`L_VAE(x) = Reconstruction Loss (e.g., MSE or BCE) + D_KL(q(z|x) || p(z))`
+                  `L_VAE(x) = Reconstruction Loss (e.g., MSE or BCE) + D_KL(q(z|x) || p(z))`
 
 This is minimized during training using stochastic gradient descent.
 
@@ -198,49 +198,27 @@ This is minimized during training using stochastic gradient descent.
 
 ---
 
-## ✅ Advantages and ❌ Limitations of Variational Autoencoders (VAEs)
+## Advantages and Limitations of Variational Autoencoders (VAEs)
 
 ### ✅ Advantages
 
-1. **Continuous and Structured Latent Space**
-   - VAEs learn a smooth and continuous latent representation, enabling operations like interpolation and vector arithmetic.
-
-2. **Generative Capabilities**
-   - Can generate new, plausible samples by sampling from the latent prior distribution `p(z)`.
-
-3. **End-to-End Differentiability**
-   - Fully trainable using standard backpropagation, thanks to the reparameterization trick.
-
-4. **Probabilistic Framework**
-   - Captures uncertainty in the latent space, making VAEs useful in Bayesian deep learning and tasks like anomaly detection.
-
-5. **Regularization via KL Divergence**
-   - Prevents overfitting and ensures the latent space is aligned with the prior, improving generalization.
-
-6. **Scalable and Flexible**
-   - Easily extendable to conditional VAEs, hierarchical VAEs, or multimodal data.
+1. **Continuous and Structured Latent Space**: VAEs learn a smooth and continuous latent representation, enabling operations like interpolation and vector arithmetic.
+2. **Generative Capabilities**: Can generate new, plausible samples by sampling from the latent prior distribution `p(z)`.
+3. **End-to-End Differentiability**: Fully trainable using standard backpropagation, thanks to the reparameterization trick.
+4. **Probabilistic Framework**: Captures uncertainty in the latent space, making VAEs useful in Bayesian deep learning and tasks like anomaly detection.
+5. **Regularization via KL Divergence**: Prevents overfitting and ensures the latent space is aligned with the prior, improving generalization.
+6. **Scalable and Flexible**: Easily extendable to conditional VAEs, hierarchical VAEs, or multimodal data.
 
 ---
 
 ### ❌ Limitations
 
-1. **Blurry Reconstructions**
-   - Often produces blurry outputs for image data due to the pixel-wise loss (e.g., MSE), which averages pixel values.
-
-2. **Limited Expressiveness**
-   - The Gaussian assumption on the latent distribution can restrict the model’s ability to capture complex data distributions.
-
-3. **KL Vanishing Problem**
-   - The KL divergence term can dominate or vanish, leading to poor latent space usage (especially early in training).
-
-4. **Trade-off Between Reconstruction and Regularization**
-   - Balancing reconstruction quality and latent space structure is challenging; strong KL regularization can hurt reconstruction quality.
-
-5. **Sampling Complexity**
-   - Approximate posterior `q(z|x)` may not match the true posterior `p(z|x)`, especially for complex data.
-
-6. **Hyperparameter Sensitivity**
-   - Performance is sensitive to architecture choices, latent dimension size, and loss weighting factors (e.g., β in β-VAE).
+1. **Blurry Reconstructions**: Often produces blurry outputs for image data due to the pixel-wise loss (e.g., MSE), which averages pixel values.
+2. **Limited Expressiveness**: The Gaussian assumption on the latent distribution can restrict the model’s ability to capture complex data distributions.
+3. **KL Vanishing Problem**: The KL divergence term can dominate or vanish, leading to poor latent space usage (especially early in training).
+4. **Trade-off Between Reconstruction and Regularization**: Balancing reconstruction quality and latent space structure is challenging; strong KL regularization can hurt reconstruction quality.
+5. **Sampling Complexity**: Approximate posterior `q(z|x)` may not match the true posterior `p(z|x)`, especially for complex data.
+6. **Hyperparameter Sensitivity**: Performance is sensitive to architecture choices, latent dimension size, and loss weighting factors (e.g., β in β-VAE).
 
 ---
 
