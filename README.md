@@ -13,16 +13,9 @@ The core aim of this project is to explore **generative modeling** using VAE on 
 ## 📁 Project Structure
 
 ```
-High-Resolution-Flower-Image-Generation-Using-Variational-Autoencoder/
-│
-├── data/ # Folder to store the dataset
-│
-├── outputs/ # Generated image samples
-│ └── reconstructed/ # Reconstructed images from test set
-│
-├── src/
-│ ├── VAE.ipynb
-│
+High-Resolution-Flower-Image-Generation-Using-Variational-Autoencoder
+├── theory.md # VAE theory 
+├── VAE.ipynb
 ├── requirements.txt # Dependencies
 └── README.md # Project documentation
 ```
