@@ -80,45 +80,84 @@ A VAE consists of:
 
 ## 📐 Mathematical Formulation
 
-Given input data `x` and latent variables `z`, we want to maximize the marginal likelihood:
+### 🧠 Key Components
+
+Let:
+
+- **\( x \)**: observed data (e.g., an image)
+- **\( z \)**: latent variable representing the underlying factors that generate \( x \)
+- **\( p(x|z) \)**: the **likelihood**, representing the probability of the data given the latent variable (decoder)
+- **\( q(z|x) \)**: the **approximate posterior**, estimating the true posterior \( p(z|x) \) using a neural network (encoder)
+- **\( p(z) \)**: the **prior** over latent variables, usually set as a standard multivariate normal distribution \( \mathcal{N}(0, I) \)
+
+### 📐 Objective of VAEs
+
+The goal is to learn the parameters of \( q(z|x) \) and \( p(x|z) \) such that we can generate realistic data \( x \) by sampling from a simple prior \( p(z) \), like \( \mathcal{N}(0, I) \).
+
+### Marginal Likelihood
+
+The fundamental quantity we want to maximize is the **log marginal likelihood**:
 
 \[
-\log p(x) = \log \int p(x|z)p(z)dz
+\log p(x) = \log \int p(x|z) \, p(z) \, dz
 \]
 
-Direct computation is intractable ⇒ use **variational inference** to approximate posterior \( q(z|x) \).
+This integral is typically **intractable** due to the high-dimensional latent space and nonlinear decoder.
+
+### 📉 Variational Lower Bound (ELBO)
+
+To overcome this, we use **variational inference** by introducing a tractable approximate posterior \( q(z|x) \) and derive a **lower bound** on the log-likelihood:
+
+\[
+\log p(x) \geq \mathbb{E}_{q(z|x)}[\log p(x|z)] - D_{KL}(q(z|x) \| p(z))
+\]
+
+This inequality is known as the **Evidence Lower Bound (ELBO)**.
+
+#### 🔹 1. Reconstruction Term:
+
+\[
+\mathbb{E}_{q(z|x)}[\log p(x|z)]
+\]
+
+- Encourages the decoder to reconstruct the input data from the sampled latent variable \( z \).
+- This is typically implemented as a **Mean Squared Error (MSE)** for continuous data or **Binary Cross-Entropy** for binary data.
+
+#### 🔹 2. KL Divergence Term:
+
+\[
+D_{KL}(q(z|x) \| p(z))
+\]
+
+- A regularization term that forces the approximate posterior \( q(z|x) \) to stay close to the prior \( p(z) = \mathcal{N}(0, I) \).
+- Ensures that the learned latent space is **smooth** and **well-behaved**, allowing for meaningful sampling and interpolation.
 
 ---
 
-## 🎯 Loss Function (ELBO)
+### 🔁 Why Reparameterization is Needed
 
-We optimize the **Evidence Lower Bound (ELBO)**:
+The term \( \mathbb{E}_{q(z|x)}[\log p(x|z)] \) involves sampling \( z \sim q(z|x) \), which is non-differentiable and thus cannot be optimized directly using backpropagation.
+
+To solve this, we use the **Reparameterization Trick**:
 
 \[
-\mathcal{L}_{VAE}(x) = \mathbb{E}_{q(z|x)}[\log p(x|z)] - D_{KL}(q(z|x) \| p(z))
+z = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)
 \]
 
-- **Reconstruction Loss**: Measures how well the decoder reconstructs the input.
-- **KL Divergence**: Encourages the latent distribution \( q(z|x) \) to be close to the prior \( p(z) = \mathcal{N}(0, I) \)
+- Instead of sampling \( z \) directly, we sample \( \epsilon \) from a standard normal distribution.
+- This separates the **randomness** from the **learnable parameters** \( \mu \) and \( \sigma \), enabling **gradient flow** through the stochastic node.
 
 ---
 
-## 🌌 Latent Space Sampling & Reparameterization Trick
+### 🧱 Full Loss Function
 
-To enable backpropagation through random sampling, we use:
+In practice, the VAE loss for a single datapoint \( x \) becomes:
 
 \[
-z = \mu + \sigma \odot \epsilon,\quad \epsilon \sim \mathcal{N}(0, I)
+\mathcal{L}_{\text{VAE}}(x) = \underbrace{\text{Reconstruction Loss}}_{\text{e.g., MSE or BCE}} + \underbrace{D_{KL}(q(z|x) \| p(z))}_{\text{KL Divergence}}
 \]
 
-This **reparameterization trick** allows gradients to flow through the sampling operation.
-
----
-## 🔁 Why Reparameterization is Needed
-To backpropagate through the sampling operation (which is non-differentiable), VAEs introduce the reparameterization trick:
-
-                                `z=μ+σ⋅ϵ,ϵ∼N(0,I)`
-This reformulation allows gradients to flow through `μ` and `σ`, enabling end-to-end training using standard stochastic gradient descent.
+This is minimized during training using stochastic gradient descent.
 
 ## 📊 Applications
 
