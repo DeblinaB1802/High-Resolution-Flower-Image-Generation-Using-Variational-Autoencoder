@@ -44,7 +44,7 @@ VAEs solve this by introducing a probabilistic approach to encoding and decoding
 
 3. Enable generation of new samples by sampling from latent space
 
-4. Ensure latent space is smooth and continuous for interpolations and      arithmetic
+4. Ensure latent space is smooth and continuous for interpolations and arithmetic
 
 ## 🧠 VAE Architecture
 
@@ -56,24 +56,24 @@ A VAE consists of:
 
 ### Architecture Diagram
 ```
-                                                                                Input x
-                                                                                  ↓
-                                                                             ┌────────────┐
-                                                                             │  Encoder   │
-                                                                             │ (Neural Net) ──> μ, log(σ²)
-                                                                             └────────────┘
-                                                                                  ↓
-                                                                 z ~ N(μ, σ²) ← Reparameterization Trick
-                                                                                  ↓
-                                                                             ┌────────────┐
-                                                                             │   Decoder  │
-                                                                             │ (Neural Net) ──> x̂
-                                                                             └────────────┘
-                                                                                  ↓
-                                                                              Reconstruction
+                                                    Input x
+                                                      ↓
+                                                 ┌────────────┐
+                                                 │  Encoder   │
+                                                 │ (Neural Net) ──> μ, log(σ²)
+                                                 └────────────┘
+                                                      ↓
+                                     z ~ N(μ, σ²) ← Reparameterization Trick
+                                                      ↓
+                                                 ┌────────────┐
+                                                 │   Decoder  │
+                                                 │ (Neural Net) ──> x̂
+                                                 └────────────┘
+                                                      ↓
+                                                  Reconstruction
 ```
 
-- **Encoder**: Learns the parameters (μ, σ²) of a Gaussian distribution for each input.
+- **Encoder**: Learns the parameters (`μ`, `σ²`) of a Gaussian distribution for each input.
 - **Decoder**: Reconstructs the input from sampled latent vector `z`.
 
 ---
@@ -116,16 +116,21 @@ This **reparameterization trick** allows gradients to flow through the sampling 
 ---
 ## 🔁 Why Reparameterization is Needed
 To backpropagate through the sampling operation (which is non-differentiable), VAEs introduce the reparameterization trick:
-`z=μ+σ⋅ϵ,ϵ∼N(0,I)`
+
+                                `z=μ+σ⋅ϵ,ϵ∼N(0,I)`
 This reformulation allows gradients to flow through `μ` and `σ`, enabling end-to-end training using standard stochastic gradient descent.
 
 ## 📊 Applications
 
-- Image generation (e.g., faces, flowers)
-- Anomaly detection
-- Latent space interpolation
-- Representation learning
-- Semi-supervised learning
+- Image generation (faces, flowers, digits, etc.)
+
+- Data interpolation between classes
+
+- Latent space arithmetic (e.g., male → female face transformation)
+
+- Anomaly detection in manufacturing or medical diagnostics
+
+- Dimensionality reduction with generative capabilities
 
 ---
 
