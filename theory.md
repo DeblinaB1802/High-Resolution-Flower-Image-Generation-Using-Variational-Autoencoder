@@ -7,10 +7,10 @@ Variational Autoencoders (VAEs) are a family of **deep generative models** that 
 ## 📚 Table of Contents
 
 - [🔍 Introduction](#-introduction)
+- [💡 Motivation Behind VAEs](#-motivation-behind-vaes)
+- [🎯 Goals of a VAE](#-goals-of-a-vaes)
 - [🧠 VAE Architecture](#-vae-architecture)
 - [📐 Mathematical Foundations](#-mathematical-foundations)
-- [🎯 Objective: Evidence Lower Bound (ELBO)](#-objective-evidence-lower-bound-elbo)
-- [🔁 Reparameterization Trick](#-reparameterization-trick)
 - [📊 Applications](#-applications)
 - [💡 Advantages & Limitations](#-advantages--limitations)
 - [📎 References](#-references)
@@ -184,7 +184,6 @@ This is minimized during training using stochastic gradient descent.
 
 ---
 
-
 ## 📊 Applications
 
 - Image generation (faces, flowers, digits, etc.)
@@ -196,6 +195,52 @@ This is minimized during training using stochastic gradient descent.
 - Anomaly detection in manufacturing or medical diagnostics
 
 - Dimensionality reduction with generative capabilities
+
+---
+
+## ✅ Advantages and ❌ Limitations of Variational Autoencoders (VAEs)
+
+### ✅ Advantages
+
+1. **Continuous and Structured Latent Space**
+   - VAEs learn a smooth and continuous latent representation, enabling operations like interpolation and vector arithmetic.
+
+2. **Generative Capabilities**
+   - Can generate new, plausible samples by sampling from the latent prior distribution `p(z)`.
+
+3. **End-to-End Differentiability**
+   - Fully trainable using standard backpropagation, thanks to the reparameterization trick.
+
+4. **Probabilistic Framework**
+   - Captures uncertainty in the latent space, making VAEs useful in Bayesian deep learning and tasks like anomaly detection.
+
+5. **Regularization via KL Divergence**
+   - Prevents overfitting and ensures the latent space is aligned with the prior, improving generalization.
+
+6. **Scalable and Flexible**
+   - Easily extendable to conditional VAEs, hierarchical VAEs, or multimodal data.
+
+---
+
+### ❌ Limitations
+
+1. **Blurry Reconstructions**
+   - Often produces blurry outputs for image data due to the pixel-wise loss (e.g., MSE), which averages pixel values.
+
+2. **Limited Expressiveness**
+   - The Gaussian assumption on the latent distribution can restrict the model’s ability to capture complex data distributions.
+
+3. **KL Vanishing Problem**
+   - The KL divergence term can dominate or vanish, leading to poor latent space usage (especially early in training).
+
+4. **Trade-off Between Reconstruction and Regularization**
+   - Balancing reconstruction quality and latent space structure is challenging; strong KL regularization can hurt reconstruction quality.
+
+5. **Sampling Complexity**
+   - Approximate posterior `q(z|x)` may not match the true posterior `p(z|x)`, especially for complex data.
+
+6. **Hyperparameter Sensitivity**
+   - Performance is sensitive to architecture choices, latent dimension size, and loss weighting factors (e.g., β in β-VAE).
 
 ---
 
