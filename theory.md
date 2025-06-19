@@ -94,7 +94,7 @@ Let:
 
 The goal is to learn the parameters of \( q(z|x) \) and \( p(x|z) \) such that we can generate realistic data \( x \) by sampling from a simple prior \( p(z) \), like \( \mathcal{N}(0, I) \).
 
-### Marginal Likelihood
+### 🔍 Marginal Likelihood
 
 The fundamental quantity we want to maximize is the **log marginal likelihood**:
 
@@ -103,6 +103,8 @@ The fundamental quantity we want to maximize is the **log marginal likelihood**:
 \]
 
 This integral is typically **intractable** due to the high-dimensional latent space and nonlinear decoder.
+
+---
 
 ### 📉 Variational Lower Bound (ELBO)
 
@@ -158,6 +160,8 @@ In practice, the VAE loss for a single datapoint \( x \) becomes:
 \]
 
 This is minimized during training using stochastic gradient descent.
+
+---
 
 ## 📊 Applications
 
