@@ -10,6 +10,30 @@ The core aim of this project is to explore **generative modeling** using VAE on 
 
 ---
 
+## 📁 Project Structure
+
+```High-Resolution-Flower-Image-Generation-Using-Variational-Autoencoder/
+│
+├── data/ # Folder to store the dataset (created automatically)
+│
+├── models/ # Saved model weights
+│ └── vae_flower.pth
+│
+├── outputs/ # Generated image samples
+│ └── reconstructed/ # Reconstructed images from test set
+│ └── generated/ # Images generated from latent vectors
+│
+├── src/
+│ ├── dataset.py # Dataset loader and preprocessing
+│ ├── model.py # VAE architecture (Encoder + Decoder)
+│ ├── train.py # Training loop
+│ └── generate.py # Inference script for image generation
+│
+├── utils.py # Utility functions (image saving etc.)
+├── requirements.txt # Dependencies
+└── README.md # Project documentation
+```
+
 ## 🌼 Dataset: Oxford Flowers102
 
 The **Oxford Flowers102** dataset consists of:
