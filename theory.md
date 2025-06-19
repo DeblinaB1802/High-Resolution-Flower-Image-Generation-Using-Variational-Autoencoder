@@ -48,11 +48,40 @@ VAEs solve this by introducing a probabilistic approach to encoding and decoding
 
 ## 🧠 VAE Architecture
 
-A VAE consists of:
+### 1. **Encoder (Inference Model)**
 
-1. **Encoder (Inference model)**: Maps input `x` to parameters of a latent distribution (mean and variance).
-2. **Latent Space**: A continuous, probabilistic representation sampled via Gaussian noise.
-3. **Decoder (Generative model)**: Maps latent variable `z` to reconstructed output `x̂`.
+- **Purpose**: Compresses input data `x` into a latent representation.
+- **Output**: Instead of a fixed vector, the encoder outputs the parameters of a **Gaussian distribution**:
+  - Mean vector `μ(x)`
+  - Log-variance vector `log σ²(x)`
+- **Probabilistic Mapping**:
+  `q_φ(z | x) = N(z; μ(x), σ²(x))`
+- This mapping allows for variability in the latent space representation and encourages generalization.
+
+---
+
+### 2. **Latent Space**
+
+- **Nature**: A **continuous and probabilistic** representation of the data.
+- **Sampling Mechanism**:
+  `z = μ + σ ⊙ ε   where ε ~ N(0, I)`
+- **Reparameterization Trick**: Allows gradients to flow through the sampling operation by making it differentiable.
+- **Purpose**:
+  - Captures essential features of input data.
+  - Enables smooth interpolation and generative capabilities.
+
+---
+
+### 3. **Decoder (Generative Model)**
+
+- **Purpose**: Reconstructs the original input `x` from sampled latent variable `z`.
+- **Output**: Reconstructed data `x̂`.
+- **Generative Distribution**:
+  `p_θ(x | z)`
+
+- Tries to generate realistic data samples from the latent space.
+
+---
 
 ### Architecture Diagram
 ```
